@@ -15,7 +15,7 @@
 		],
 		
 		labels1: [
-		  Drupal.t('Years'),
+		  Drupal.t('Year'),
 		  Drupal.t('Month'),
 		  Drupal.t('Week'),
 		  Drupal.t('Day'),
