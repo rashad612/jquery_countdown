@@ -69,8 +69,9 @@ function jquery_countdown_block_view($delta = '') {
 
 function _jquery_countdown_block_content($delta = '') {
   
-   
+  // @TODO: ? Never used please explain... or fix it... 
   $init_format = date("F d, Y g:i a", time());
+  
   $format = '';
   $msg_format = variable_get('jquery_countdown_msg_format', '');
   
@@ -96,7 +97,7 @@ function _jquery_countdown_block_content($delta = '') {
     'expiryText' => check_plain(variable_get('jquery_countdown_exp_txt', ''))
   );
   
-  return theme('jquery_countdown', $options, $init_format, 'jquery_countdown-' . $delta);
+  return theme('jquery_countdown', array('options' => $options, 'id' => 'jquery_countdown-' . $delta ));
 }// end function _jquery_countdown_block_content;
 
 /**
@@ -166,7 +167,6 @@ function jquery_countdown_theme($existing, $type, $theme, $path) {
     'jquery_countdown' => array(
       'variables' => array(
         'options' => NULL,
-        'topics' => NULL,
         'id' => NULL,
       ),
     ),
@@ -184,12 +184,17 @@ function jquery_countdown_theme($existing, $type, $theme, $path) {
  * @param $id
  *   (optional) The name of the element.
  */
-function theme_jquery_countdown($options = array(), $content = '', $id = 'jquery-countdown') {
-  
+function theme_jquery_countdown($variables) {
+  //@TODO: add javascript fallback for target time as possible $content ?!
+  $id = $variables['id'];
+  $options = $variables['options'];
+  dpm($variables);
   // Construct the ID name and add the JavaScript.
   $id = drupal_html_id($id);
+  // add the Javascript
   jquery_countdown_add('#'. $id, $options);
+
   // Construct the HTML.
-  return "<div id='$id' class='jquery-countdown'>$content</div>";
+  return '<div id="' . $id . '" class="jquery-countdown"></div>';
 }
 
