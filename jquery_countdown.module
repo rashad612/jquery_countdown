@@ -188,7 +188,7 @@ function theme_jquery_countdown($variables) {
   //@TODO: add javascript fallback for target time as possible $content ?!
   $id = $variables['id'];
   $options = $variables['options'];
-  dpm($variables);
+
   // Construct the ID name and add the JavaScript.
   $id = drupal_html_id($id);
   // add the Javascript
