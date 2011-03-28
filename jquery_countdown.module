@@ -121,32 +121,7 @@ function _jquery_countdown_block_content($delta = '') {
  */
 function jquery_countdown_add($selector = NULL, $options = array()) {
   // Add jQuery Countdown only if it hasn't been added yet.
-  static $jquery_countdown_added = FALSE;
-  if ($jquery_countdown_added == FALSE) {
-    // Add the stylesheet and the plugin depending on if we wanted the compressed one of not.
-    drupal_add_css(drupal_get_path('module', 'jquery_countdown') .'/jquery_countdown/jquery.countdown.css');
-
-    // Add the minified version of JavaScript preprocessing is enabled.
-    if (variable_get('preprocess_js', 0)) {
-      drupal_add_js(drupal_get_path('module', 'jquery_countdown') .'/jquery_countdown/jquery.countdown.min.js');
-    }
-    else {
-      drupal_add_js(drupal_get_path('module', 'jquery_countdown') .'/jquery_countdown/jquery.countdown.js');
-    }
-
-    // Enable localization if available.
-    global $language;
-    if (isset($language->language)) {
-      $localization = drupal_get_path('module', 'jquery_countdown') .'/jquery_countdown/jquery.countdown-'. $language->language .'.js';
-      if (file_exists($localization)) {
-        drupal_add_js($localization);
-      }
-    }
-
-    // Register the jQuery Countdown behaviour.
-    drupal_add_js(drupal_get_path('module', 'jquery_countdown') .'/jquery_countdown.js');
-    $jquery_countdown_added = TRUE;
-  }
+  drupal_add_library('jquery_countdown', 'jquery.countdown');
 
   // Make sure to only add the same selector once.
   static $added_selectors = array();
@@ -157,6 +132,34 @@ function jquery_countdown_add($selector = NULL, $options = array()) {
     drupal_add_js(array('jquery_countdown' => array($selector => $options)), 'setting');
   }
 }
+
+/**
+ * Implementation of hook_library()
+ * provides the jquery.countdown script with css as library
+ */
+ function jquery_countdown_library() {
+   $libraries = array();
+   
+   // jquery.countdown core script
+   $libraries['jquery.countdown'] = array(
+    'title' => 'jQuery Countdown',
+    'website' => 'http://keith-wood.name/countdown.html',
+    'version' => '1.5.9',
+    'js' => array(
+      drupal_get_path('module', 'jquery_countdown') . '/jquery_countdown/jquery.countdown.js' => array(),
+      drupal_get_path('module', 'jquery_countdown') . '/jquery_countdown.js' => array(),
+      drupal_get_path('module', 'jquery_countdown') . '/jquery.countdown-drupal.js' => array('group' => JS_THEME),
+    ),
+    'css' => array(
+      drupal_get_path('module', 'jquery_countdown') . '/jquery_countdown/jquery.countdown.css' => array(
+        'type' => 'file',
+        'media' => 'screen',
+      ),
+    ),
+   );
+   
+   return $libraries;
+ }
 
 /**
  * Implementation of hook_theme().
